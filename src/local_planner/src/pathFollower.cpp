@@ -91,6 +91,8 @@ bool pathInit = false;
 bool navFwd = true;
 double switchTime = 0;
 
+string name_space = "robot_1";
+
 nav_msgs::Path path;
 
 void odomHandler(const nav_msgs::Odometry::ConstPtr& odomIn)
@@ -213,19 +215,23 @@ int main(int argc, char** argv)
   nhPrivate.getParam("autonomySpeed", autonomySpeed);
   nhPrivate.getParam("joyToSpeedDelay", joyToSpeedDelay);
 
-  ros::Subscriber subOdom = nh.subscribe<nav_msgs::Odometry> ("/state_estimation", 5, odomHandler);
+  nhPrivate.getParam("name_space", name_space);
 
-  ros::Subscriber subPath = nh.subscribe<nav_msgs::Path> ("/path", 5, pathHandler);
+  ros::Subscriber subOdom = nh.subscribe<nav_msgs::Odometry> ("state_estimation", 5, odomHandler);
 
-  ros::Subscriber subJoystick = nh.subscribe<sensor_msgs::Joy> ("/joy", 5, joystickHandler);
+  ros::Subscriber subPath = nh.subscribe<nav_msgs::Path> ("path", 5, pathHandler);
 
-  ros::Subscriber subSpeed = nh.subscribe<std_msgs::Float32> ("/speed", 5, speedHandler);
+  ros::Subscriber subJoystick = nh.subscribe<sensor_msgs::Joy> ("joy", 5, joystickHandler);
 
-  ros::Subscriber subStop = nh.subscribe<std_msgs::Int8> ("/stop", 5, stopHandler);
+  ros::Subscriber subSpeed = nh.subscribe<std_msgs::Float32> ("speed", 5, speedHandler);
 
-  ros::Publisher pubSpeed = nh.advertise<geometry_msgs::TwistStamped> ("/cmd_vel", 5);
+  ros::Subscriber subStop = nh.subscribe<std_msgs::Int8> ("stop", 5, stopHandler);
+
+  ros::Publisher pubSpeed = nh.advertise<geometry_msgs::TwistStamped> ("cmd_vel_sim", 5);
+
   geometry_msgs::TwistStamped cmd_vel;
-  cmd_vel.header.frame_id = "vehicle";
+  geometry_msgs::Twist cmd_vel_no_timestamp;
+  cmd_vel.header.frame_id = name_space + "/base_link";
 
   if (autonomyMode) {
     joySpeed = autonomySpeed / maxSpeed;

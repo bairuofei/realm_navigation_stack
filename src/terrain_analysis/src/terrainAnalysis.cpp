@@ -222,19 +222,19 @@ int main(int argc, char **argv) {
   nhPrivate.getParam("disRatioZ", disRatioZ);
 
   ros::Subscriber subOdometry =
-      nh.subscribe<nav_msgs::Odometry>("/state_estimation", 5, odometryHandler);
+      nh.subscribe<nav_msgs::Odometry>("state_estimation", 5, odometryHandler);
 
   ros::Subscriber subLaserCloud = nh.subscribe<sensor_msgs::PointCloud2>(
-      "/registered_scan", 5, laserCloudHandler);
+      "registered_scan", 5, laserCloudHandler);
 
   ros::Subscriber subJoystick =
-      nh.subscribe<sensor_msgs::Joy>("/joy", 5, joystickHandler);
+      nh.subscribe<sensor_msgs::Joy>("joy", 5, joystickHandler);
 
   ros::Subscriber subClearing =
-      nh.subscribe<std_msgs::Float32>("/map_clearing", 5, clearingHandler);
+      nh.subscribe<std_msgs::Float32>("map_clearing", 5, clearingHandler);
 
   ros::Publisher pubLaserCloud =
-      nh.advertise<sensor_msgs::PointCloud2>("/terrain_map", 2);
+      nh.advertise<sensor_msgs::PointCloud2>("terrain_map", 2);
 
   for (int i = 0; i < terrainVoxelNum; i++) {
     terrainVoxelCloud[i].reset(new pcl::PointCloud<pcl::PointXYZI>());

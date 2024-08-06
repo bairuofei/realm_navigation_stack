@@ -1,5 +1,6 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="example">
 
+  <!-- 设置gazebo颜色的宏 -->
   <xacro:macro name="gazebo_material" params="ref color">
     <gazebo reference="${ref}">
       <material>Gazebo/${color}</material>

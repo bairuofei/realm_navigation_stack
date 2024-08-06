@@ -52,11 +52,42 @@ link_directories(
 
 ## Declare executables
 add_executable(vehicleSimulator src/vehicleSimulator.cpp)
-
 ## Specify libraries to link a library or executable target against
 target_link_libraries(vehicleSimulator ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${PCL_LIBRARIES})
-
 install(TARGETS vehicleSimulator
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+add_executable(pioneer_simulator src/pioneerSimulator.cpp)
+## Specify libraries to link a library or executable target against
+target_link_libraries(pioneer_simulator ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${PCL_LIBRARIES})
+
+install(TARGETS pioneer_simulator
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+add_executable(pub_registered_scan src/pubRegScan.cpp)
+## Specify libraries to link a library or executable target against
+target_link_libraries(pub_registered_scan ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${PCL_LIBRARIES})
+
+install(TARGETS pub_registered_scan
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+
+## Declare executables
+add_executable(vehicleSimulatorForGazebo src/vehicleSimulatorForGazebo.cpp)
+
+## Specify libraries to link a library or executable target against
+target_link_libraries(vehicleSimulatorForGazebo ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${PCL_LIBRARIES})
+
+install(TARGETS vehicleSimulatorForGazebo
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

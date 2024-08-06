@@ -1,5 +1,7 @@
 <launch>
 
+  <arg name="onlyForGazebo" default="false"/>
+
   <arg name="sensorOffsetX" default="0"/>
   <arg name="sensorOffsetY" default="0"/>
   <arg name="vehicleHeight" default="0.75"/>
@@ -74,6 +76,8 @@
     <param name="smoothRateIncl" value="$(arg smoothRateIncl)" />
     <param name="InclFittingThre" value="$(arg InclFittingThre)" />
     <param name="maxIncl" value="$(arg maxIncl)" />
+
+    <param name="onlyForGazebo" value="$(arg onlyForGazebo)"/>
   </node>
 
 </launch>

@@ -78,12 +78,12 @@ float vehicleYaw = 0;
 float vehicleYawRate = 0;
 float vehicleSpeed = 0;
 
-float terrainZ = 0;
-float terrainRoll = 0;
-float terrainPitch = 0;
+float terrainZ = 0;  // 地面Z轴高度
+float terrainRoll = 0;  // 横滚
+float terrainPitch = 0;   // 俯仰
 
 const int stackNum = 400;
-float vehicleXStack[stackNum];  // Record history trajectroy and terrain information
+float vehicleXStack[stackNum];
 float vehicleYStack[stackNum];
 float vehicleZStack[stackNum];
 float vehicleRollStack[stackNum];
@@ -100,92 +100,92 @@ pcl::VoxelGrid<pcl::PointXYZI> terrainDwzFilter;
 
 ros::Publisher *pubScanPointer = NULL;
 
-void scanHandler(const sensor_msgs::PointCloud2::ConstPtr &scanIn)
-{
-    if (!systemInited)
-    {
-        systemInitCount++;
-        if (systemInitCount > systemDelay)
-        {
-            systemInited = true;
-        }
-        return;
-    }
+// void scanHandler(const sensor_msgs::PointCloud2::ConstPtr &scanIn)
+// {
+//     if (!systemInited)
+//     {
+//         systemInitCount++;
+//         if (systemInitCount > systemDelay)
+//         {
+//             systemInited = true;
+//         }
+//         return;
+//     }
 
-    double scanTime = scanIn->header.stamp.toSec();
+//     double scanTime = scanIn->header.stamp.toSec();
 
-    if (odomSendIDPointer < 0)
-    {
-        return;
-    }
-    while (odomTimeStack[(odomRecIDPointer + 1) % stackNum] < scanTime &&
-           odomRecIDPointer != (odomSendIDPointer + 1) % stackNum)
-    {
-        odomRecIDPointer = (odomRecIDPointer + 1) % stackNum;
-    }
+//     if (odomSendIDPointer < 0)
+//     {
+//         return;
+//     }
+//     while (odomTimeStack[(odomRecIDPointer + 1) % stackNum] < scanTime &&
+//            odomRecIDPointer != (odomSendIDPointer + 1) % stackNum)
+//     {
+//         odomRecIDPointer = (odomRecIDPointer + 1) % stackNum;
+//     }
 
-    double odomRecTime = odomTime.toSec();
-    float vehicleRecX = vehicleX;
-    float vehicleRecY = vehicleY;
-    float vehicleRecZ = vehicleZ;
-    float vehicleRecRoll = vehicleRoll;
-    float vehicleRecPitch = vehiclePitch;
-    float vehicleRecYaw = vehicleYaw;
-    float terrainRecRoll = terrainRoll;
-    float terrainRecPitch = terrainPitch;
+//     double odomRecTime = odomTime.toSec();
+//     float vehicleRecX = vehicleX;
+//     float vehicleRecY = vehicleY;
+//     float vehicleRecZ = vehicleZ;
+//     float vehicleRecRoll = vehicleRoll;
+//     float vehicleRecPitch = vehiclePitch;
+//     float vehicleRecYaw = vehicleYaw;
+//     float terrainRecRoll = terrainRoll;
+//     float terrainRecPitch = terrainPitch;
 
-    if (use_gazebo_time)
-    {
-        odomRecTime = odomTimeStack[odomRecIDPointer];
-        vehicleRecX = vehicleXStack[odomRecIDPointer];
-        vehicleRecY = vehicleYStack[odomRecIDPointer];
-        vehicleRecZ = vehicleZStack[odomRecIDPointer];
-        vehicleRecRoll = vehicleRollStack[odomRecIDPointer];
-        vehicleRecPitch = vehiclePitchStack[odomRecIDPointer];
-        vehicleRecYaw = vehicleYawStack[odomRecIDPointer];
-        terrainRecRoll = terrainRollStack[odomRecIDPointer];
-        terrainRecPitch = terrainPitchStack[odomRecIDPointer];
-    }
+//     if (use_gazebo_time)
+//     {
+//         odomRecTime = odomTimeStack[odomRecIDPointer];
+//         vehicleRecX = vehicleXStack[odomRecIDPointer];
+//         vehicleRecY = vehicleYStack[odomRecIDPointer];
+//         vehicleRecZ = vehicleZStack[odomRecIDPointer];
+//         vehicleRecRoll = vehicleRollStack[odomRecIDPointer];
+//         vehicleRecPitch = vehiclePitchStack[odomRecIDPointer];
+//         vehicleRecYaw = vehicleYawStack[odomRecIDPointer];
+//         terrainRecRoll = terrainRollStack[odomRecIDPointer];
+//         terrainRecPitch = terrainPitchStack[odomRecIDPointer];
+//     }
 
-    float sinTerrainRecRoll = sin(terrainRecRoll);
-    float cosTerrainRecRoll = cos(terrainRecRoll);
-    float sinTerrainRecPitch = sin(terrainRecPitch);
-    float cosTerrainRecPitch = cos(terrainRecPitch);
+//     float sinTerrainRecRoll = sin(terrainRecRoll);
+//     float cosTerrainRecRoll = cos(terrainRecRoll);
+//     float sinTerrainRecPitch = sin(terrainRecPitch);
+//     float cosTerrainRecPitch = cos(terrainRecPitch);
 
-    scanData->clear();
-    pcl::fromROSMsg(*scanIn, *scanData);
-    pcl::removeNaNFromPointCloud(*scanData, *scanData, scanInd);
+//     scanData->clear();
+//     pcl::fromROSMsg(*scanIn, *scanData);
+//     pcl::removeNaNFromPointCloud(*scanData, *scanData, scanInd);
 
-    int scanDataSize = scanData->points.size();
-    for (int i = 0; i < scanDataSize; i++)
-    {
-        float pointX1 = scanData->points[i].x;
-        float pointY1 = scanData->points[i].y * cosTerrainRecRoll - scanData->points[i].z * sinTerrainRecRoll;
-        float pointZ1 = scanData->points[i].y * sinTerrainRecRoll + scanData->points[i].z * cosTerrainRecRoll;
+//     int scanDataSize = scanData->points.size();
+//     for (int i = 0; i < scanDataSize; i++)
+//     {
+//         float pointX1 = scanData->points[i].x;
+//         float pointY1 = scanData->points[i].y * cosTerrainRecRoll - scanData->points[i].z * sinTerrainRecRoll;
+//         float pointZ1 = scanData->points[i].y * sinTerrainRecRoll + scanData->points[i].z * cosTerrainRecRoll;
 
-        float pointX2 = pointX1 * cosTerrainRecPitch + pointZ1 * sinTerrainRecPitch;
-        float pointY2 = pointY1;
-        float pointZ2 = -pointX1 * sinTerrainRecPitch + pointZ1 * cosTerrainRecPitch;
+//         float pointX2 = pointX1 * cosTerrainRecPitch + pointZ1 * sinTerrainRecPitch;
+//         float pointY2 = pointY1;
+//         float pointZ2 = -pointX1 * sinTerrainRecPitch + pointZ1 * cosTerrainRecPitch;
 
-        float pointX3 = pointX2 + vehicleRecX;
-        float pointY3 = pointY2 + vehicleRecY;
-        float pointZ3 = pointZ2 + vehicleRecZ;
+//         float pointX3 = pointX2 + vehicleRecX;
+//         float pointY3 = pointY2 + vehicleRecY;
+//         float pointZ3 = pointZ2 + vehicleRecZ;
 
-        scanData->points[i].x = pointX3;
-        scanData->points[i].y = pointY3;
-        scanData->points[i].z = pointZ3;
-    }
+//         scanData->points[i].x = pointX3;
+//         scanData->points[i].y = pointY3;
+//         scanData->points[i].z = pointZ3;
+//     }
 
-    // publish 5Hz registered scan messages
-    sensor_msgs::PointCloud2 scanData2;
-    pcl::toROSMsg(*scanData, scanData2);
-    scanData2.header.stamp = ros::Time().fromSec(odomRecTime);
-    scanData2.header.frame_id = "map";
-    if (!onlyForGazebo)
-        pubScanPointer->publish(scanData2);
-}
+//     // publish 5Hz registered scan messages
+//     sensor_msgs::PointCloud2 scanData2;
+//     pcl::toROSMsg(*scanData, scanData2);
+//     scanData2.header.stamp = ros::Time().fromSec(odomRecTime);
+//     scanData2.header.frame_id = "map";
+//     if (!onlyForGazebo)
+//         pubScanPointer->publish(scanData2);
+// }
 
-// Currently this function is not used, because adjustZ and adjustIncl are false
+// 根据tarrainCloud，调整对当前地面的横滚和俯仰角度的估计
 void terrainCloudHandler(const sensor_msgs::PointCloud2ConstPtr &terrainCloud2)
 {
     if (!adjustZ && !adjustIncl)
@@ -296,19 +296,19 @@ void terrainCloudHandler(const sensor_msgs::PointCloud2ConstPtr &terrainCloud2)
     }
 
     if (terrainValid && adjustIncl)
-    {
-        terrainPitch = (1.0 - smoothRateIncl) * terrainPitch + smoothRateIncl * matX.at<float>(0, 0);
+    {   
+        // 俯仰
+        terrainPitch = (1.0 - smoothRateIncl) * terrainPitch + smoothRateIncl * matX.at<float>(0, 0); 
+        // 横滚
         terrainRoll = (1.0 - smoothRateIncl) * terrainRoll + smoothRateIncl * matX.at<float>(1, 0);
     }
 }
 
-void speedHandler(const geometry_msgs::Twist::ConstPtr &speedIn)
-{
-    // vehicleSpeed = speedIn->twist.linear.x;
-    // vehicleYawRate = speedIn->twist.angular.z;
-    vehicleSpeed = speedIn->linear.x;
-    vehicleYawRate = speedIn->angular.z;
-}
+// void speedHandler(const geometry_msgs::TwistStamped::ConstPtr &speedIn)
+// {
+//     vehicleSpeed = speedIn->twist.linear.x;
+//     vehicleYawRate = speedIn->twist.angular.z;
+// }
 
 void speedHandler2(const geometry_msgs::Twist::ConstPtr &speedIn)
 {
@@ -346,22 +346,23 @@ int main(int argc, char **argv)
     nhPrivate.getParam("onlyForGazebo", onlyForGazebo);
 
 
-    ros::Subscriber subSpeed = nh.subscribe<geometry_msgs::Twist>("/cmd_vel", 5, speedHandler);
+    // ros::Subscriber subSpeed = nh.subscribe<geometry_msgs::TwistStamped>("/cmd_vel", 5, speedHandler);
     ros::Subscriber subSpeed2 = nh.subscribe<geometry_msgs::Twist>("/cmd_vel_manual", 5, speedHandler2);
 
-    ros::Subscriber subScan = nh.subscribe<sensor_msgs::PointCloud2>("/velodyne_points", 2, scanHandler);
+    // 订阅原始点云，并根据机器人当前的位姿进行点云register
+    // ros::Subscriber subScan = nh.subscribe<sensor_msgs::PointCloud2>("/velodyne_points", 2, scanHandler);
     ros::Subscriber subTerrainCloud = nh.subscribe<sensor_msgs::PointCloud2>("/terrain_map", 2, terrainCloudHandler);
-    ros::Publisher pubVehicleOdom = nh.advertise<nav_msgs::Odometry>("/state_estimation", 5);
+    // ros::Publisher pubVehicleOdom = nh.advertise<nav_msgs::Odometry>("/state_estimation", 5);
 
 
-    nav_msgs::Odometry odomData;
-    odomData.header.frame_id = "map";
-    odomData.child_frame_id = "sensor";
+    // nav_msgs::Odometry odomData;
+    // odomData.header.frame_id = "map";
+    // odomData.child_frame_id = "sensor";
 
-    tf::TransformBroadcaster tfBroadcaster;
-    tf::StampedTransform odomTrans;
-    odomTrans.frame_id_ = "map";
-    odomTrans.child_frame_id_ = "sensor";
+    // tf::TransformBroadcaster tfBroadcaster;
+    // tf::StampedTransform odomTrans;
+    // odomTrans.frame_id_ = "map";
+    // odomTrans.child_frame_id_ = "sensor";
 
     ros::Publisher pubModelState = nh.advertise<gazebo_msgs::ModelState>("/gazebo/set_model_state", 5);
     gazebo_msgs::ModelState cameraState;
@@ -371,21 +372,21 @@ int main(int argc, char **argv)
     gazebo_msgs::ModelState robotState;
     robotState.model_name = "robot";
 
-    ros::Publisher pubScan = nh.advertise<sensor_msgs::PointCloud2>("/registered_scan", 2);
-    pubScanPointer = &pubScan;
+    // ros::Publisher pubScan = nh.advertise<sensor_msgs::PointCloud2>("/registered_scan", 2);
+    // pubScanPointer = &pubScan;
 
     terrainDwzFilter.setLeafSize(terrainVoxelSize, terrainVoxelSize, terrainVoxelSize);
 
     printf("\nSimulation started.\n\n");
 
-    ros::Rate rate(200);
+    ros::Rate rate(200);  // 200 Hz
     bool status = ros::ok();
     while (status)
     {
         ros::spinOnce();
 
         /***************** Simulate Vehicle Dynamics ************************/
-        float vehicleRecRoll = vehicleRoll;
+        float vehicleRecRoll = vehicleRoll;  // Rec for record
         float vehicleRecPitch = vehiclePitch;
         float vehicleRecZ = vehicleZ;
 
@@ -425,25 +426,26 @@ int main(int argc, char **argv)
         // publish 200Hz odometry messages
         geometry_msgs::Quaternion geoQuat = tf::createQuaternionMsgFromRollPitchYaw(vehicleRoll, vehiclePitch, vehicleYaw);
 
-        odomData.header.stamp = odomTime;
-        odomData.pose.pose.orientation = geoQuat;
-        odomData.pose.pose.position.x = vehicleX;
-        odomData.pose.pose.position.y = vehicleY;
-        odomData.pose.pose.position.z = vehicleZ;
-        odomData.twist.twist.angular.x = 200.0 * (vehicleRoll - vehicleRecRoll);
-        odomData.twist.twist.angular.y = 200.0 * (vehiclePitch - vehicleRecPitch);
-        odomData.twist.twist.angular.z = vehicleYawRate;
-        odomData.twist.twist.linear.x = vehicleSpeed;
-        odomData.twist.twist.linear.z = 200.0 * (vehicleZ - vehicleRecZ);
-        if (!onlyForGazebo)
-            pubVehicleOdom.publish(odomData);    // /state_estimation
+        // odomData.header.stamp = odomTime;
+        // odomData.pose.pose.orientation = geoQuat;
+        // odomData.pose.pose.position.x = vehicleX;
+        // odomData.pose.pose.position.y = vehicleY;
+        // odomData.pose.pose.position.z = vehicleZ;
+        // odomData.twist.twist.angular.x = 200.0 * (vehicleRoll - vehicleRecRoll);
+        // odomData.twist.twist.angular.y = 200.0 * (vehiclePitch - vehicleRecPitch);
+        // odomData.twist.twist.angular.z = vehicleYawRate;
+        // odomData.twist.twist.linear.x = vehicleSpeed;
+        // odomData.twist.twist.linear.z = 200.0 * (vehicleZ - vehicleRecZ);
+        // if (!onlyForGazebo)
+        //     pubVehicleOdom.publish(odomData);    // /state_estimation
 
-        // publish 200Hz tf messages
-        // Publish groundTruth map->sensor transformation
-        odomTrans.stamp_ = odomTime;
-        odomTrans.setRotation(tf::Quaternion(geoQuat.x, geoQuat.y, geoQuat.z, geoQuat.w));
-        odomTrans.setOrigin(tf::Vector3(vehicleX, vehicleY, vehicleZ));
-        tfBroadcaster.sendTransform(odomTrans);   // From map to sensor
+        // // publish 200Hz tf messages
+        // // FIXME:  这里的tf和loamInterface中发布的tf有何区别？  注意在运行loamInterface时，是不运行当前节点的，因此不冲突？？
+        // odomTrans.stamp_ = odomTime;
+        // odomTrans.setRotation(tf::Quaternion(geoQuat.x, geoQuat.y, geoQuat.z, geoQuat.w));
+        // odomTrans.setOrigin(tf::Vector3(vehicleX, vehicleY, vehicleZ));
+        // if (onlyForGazebo)
+        //     tfBroadcaster.sendTransform(odomTrans);   // From map to sensor
 
         /******************** Set GroundTruth Pose for Gazebo **************************************/
         // publish 200Hz Gazebo model state messages (this is for Gazebo simulation)
@@ -458,15 +460,30 @@ int main(int argc, char **argv)
         robotState.pose.position.y = vehicleY;
         robotState.pose.position.z = vehicleZ;
         pubModelState.publish(robotState);
-        // ROS_INFO("Robot position: %f, %f, %f", vehicleX, vehicleY, vehicleZ);
 
-        geoQuat = tf::createQuaternionMsgFromRollPitchYaw(terrainRoll, terrainPitch, 0);
+        // geoQuat = tf::createQuaternionMsgFromRollPitchYaw(terrainRoll, terrainPitch, 0);  // lidar的旋转不随着机器人运动而改变
+        Eigen::Affine3f T_Robot_Lidar = Eigen::Affine3f::Identity();
+        T_Robot_Lidar.translation() << 0.1, 0, 0;
+        Eigen::Affine3f T_World_Robot = Eigen::Affine3f::Identity();
+        T_World_Robot.translation() << vehicleX, vehicleY, vehicleZ;
+        Eigen::Quaternionf tempQuat(geoQuat.w, geoQuat.x, geoQuat.y, geoQuat.z);
+        T_World_Robot.rotate(tempQuat);
+        Eigen::Affine3f T_World_Lidar = T_World_Robot * T_Robot_Lidar;
 
-        lidarState.pose.orientation = geoQuat;
-        lidarState.pose.position.x = vehicleX;
-        lidarState.pose.position.y = vehicleY;
-        lidarState.pose.position.z = vehicleZ;
+        geometry_msgs::Quaternion lidarQuat;
+        tempQuat = T_World_Lidar.rotation();
+        lidarQuat.w = tempQuat.w();
+        lidarQuat.x = tempQuat.x();
+        lidarQuat.y = tempQuat.y();
+        lidarQuat.z = tempQuat.z();
+
+        lidarState.pose.orientation = lidarQuat;   // Lidar
+        lidarState.pose.position.x = T_World_Lidar.translation().x(); 
+        lidarState.pose.position.y = T_World_Lidar.translation().y();
+        lidarState.pose.position.z = T_World_Lidar.translation().z();
         pubModelState.publish(lidarState);
+
+        // ROS_INFO("Lidar position: %f, %f, %f", lidarState.pose.position.x, lidarState.pose.position.y, lidarState.pose.position.z);
 
         status = ros::ok();
         rate.sleep();

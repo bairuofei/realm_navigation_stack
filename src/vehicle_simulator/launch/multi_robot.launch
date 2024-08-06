@@ -1,0 +1,9 @@
+<launch>
+    <include file="$(find vehicle_simulator)/launch/develop_environment.launch" >
+        <arg name="name_space" default="robot_1"/>
+        <arg name="vehicleX" default="0"/>
+        <arg name="vehicleY" default="0"/>
+    </include>
+
+    <node pkg="tf2_ros" type="static_transform_publisher" name="static_tf_pub_map_to_odom" args="0 0 0 0 0 0 map odom" />
+</launch>

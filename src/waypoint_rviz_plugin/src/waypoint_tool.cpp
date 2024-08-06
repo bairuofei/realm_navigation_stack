@@ -20,9 +20,9 @@ void WaypointTool::onInitialize()
 
 void WaypointTool::updateTopic()
 {
-  sub_ = nh_.subscribe<nav_msgs::Odometry> ("/state_estimation", 5, &WaypointTool::odomHandler, this);
-  pub_ = nh_.advertise<geometry_msgs::PointStamped>("/way_point", 5);
-  pub_joy_ = nh_.advertise<sensor_msgs::Joy>("/joy", 5);
+  sub_ = nh_.subscribe<nav_msgs::Odometry> ("state_estimation", 5, &WaypointTool::odomHandler, this);
+  pub_ = nh_.advertise<geometry_msgs::PointStamped>("way_point", 5);
+  pub_joy_ = nh_.advertise<sensor_msgs::Joy>("joy", 5);
 }
 
 void WaypointTool::odomHandler(const nav_msgs::Odometry::ConstPtr& odom)

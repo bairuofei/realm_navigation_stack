@@ -190,17 +190,17 @@ int main(int argc, char** argv)
   nhPrivate.getParam("ceilingFilteringThre", ceilingFilteringThre);
   nhPrivate.getParam("localTerrainMapRadius", localTerrainMapRadius);
 
-  ros::Subscriber subOdometry = nh.subscribe<nav_msgs::Odometry>("/state_estimation", 5, odometryHandler);
+  ros::Subscriber subOdometry = nh.subscribe<nav_msgs::Odometry>("state_estimation", 5, odometryHandler);
 
-  ros::Subscriber subLaserCloud = nh.subscribe<sensor_msgs::PointCloud2>("/registered_scan", 5, laserCloudHandler);
+  ros::Subscriber subLaserCloud = nh.subscribe<sensor_msgs::PointCloud2>("registered_scan", 5, laserCloudHandler);
 
-  ros::Subscriber subJoystick = nh.subscribe<sensor_msgs::Joy>("/joy", 5, joystickHandler);
+  ros::Subscriber subJoystick = nh.subscribe<sensor_msgs::Joy>("joy", 5, joystickHandler);
 
-  ros::Subscriber subClearing = nh.subscribe<std_msgs::Float32>("/cloud_clearing", 5, clearingHandler);
+  ros::Subscriber subClearing = nh.subscribe<std_msgs::Float32>("cloud_clearing", 5, clearingHandler);
 
-  ros::Subscriber subTerrainCloudLocal = nh.subscribe<sensor_msgs::PointCloud2>("/terrain_map", 2, terrainCloudLocalHandler);
+  ros::Subscriber subTerrainCloudLocal = nh.subscribe<sensor_msgs::PointCloud2>("terrain_map", 2, terrainCloudLocalHandler);
 
-  ros::Publisher pubTerrainCloud = nh.advertise<sensor_msgs::PointCloud2>("/terrain_map_ext", 2);
+  ros::Publisher pubTerrainCloud = nh.advertise<sensor_msgs::PointCloud2>("terrain_map_ext", 2);
 
   for (int i = 0; i < terrainVoxelNum; i++)
   {

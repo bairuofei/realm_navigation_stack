@@ -89,6 +89,8 @@ const int gridVoxelNumX = 161;
 const int gridVoxelNumY = 451;
 const int gridVoxelNum = gridVoxelNumX * gridVoxelNumY;
 
+string name_space = "robot_1";
+
 pcl::PointCloud<pcl::PointXYZI>::Ptr laserCloud(new pcl::PointCloud<pcl::PointXYZI>());
 pcl::PointCloud<pcl::PointXYZI>::Ptr laserCloudCrop(new pcl::PointCloud<pcl::PointXYZI>());
 pcl::PointCloud<pcl::PointXYZI>::Ptr laserCloudDwz(new pcl::PointCloud<pcl::PointXYZI>());
@@ -536,32 +538,34 @@ int main(int argc, char** argv)
   nhPrivate.getParam("goalX", goalX);
   nhPrivate.getParam("goalY", goalY);
 
+  nhPrivate.getParam("name_space", name_space);
+
   ros::Subscriber subOdometry = nh.subscribe<nav_msgs::Odometry>
-                                ("/state_estimation", 5, odometryHandler);
+                                ("state_estimation", 5, odometryHandler);
 
   ros::Subscriber subLaserCloud = nh.subscribe<sensor_msgs::PointCloud2>
-                                  ("/registered_scan", 5, laserCloudHandler);
+                                  ("registered_scan", 5, laserCloudHandler);
 
   ros::Subscriber subTerrainCloud = nh.subscribe<sensor_msgs::PointCloud2>
-                                    ("/terrain_map", 5, terrainCloudHandler);
+                                    ("terrain_map", 5, terrainCloudHandler);
 
-  ros::Subscriber subJoystick = nh.subscribe<sensor_msgs::Joy> ("/joy", 5, joystickHandler);
+  ros::Subscriber subJoystick = nh.subscribe<sensor_msgs::Joy> ("joy", 5, joystickHandler);
 
-  ros::Subscriber subGoal = nh.subscribe<geometry_msgs::PointStamped> ("/way_point", 5, goalHandler);
+  ros::Subscriber subGoal = nh.subscribe<geometry_msgs::PointStamped> ("way_point", 5, goalHandler);
 
-  ros::Subscriber subSpeed = nh.subscribe<std_msgs::Float32> ("/speed", 5, speedHandler);
+  ros::Subscriber subSpeed = nh.subscribe<std_msgs::Float32> ("speed", 5, speedHandler);
 
-  ros::Subscriber subBoundary = nh.subscribe<geometry_msgs::PolygonStamped> ("/navigation_boundary", 5, boundaryHandler);
+  ros::Subscriber subBoundary = nh.subscribe<geometry_msgs::PolygonStamped> ("navigation_boundary", 5, boundaryHandler);
 
-  ros::Subscriber subAddedObstacles = nh.subscribe<sensor_msgs::PointCloud2> ("/added_obstacles", 5, addedObstaclesHandler);
+  ros::Subscriber subAddedObstacles = nh.subscribe<sensor_msgs::PointCloud2> ("added_obstacles", 5, addedObstaclesHandler);
 
-  ros::Subscriber subCheckObstacle = nh.subscribe<std_msgs::Bool> ("/check_obstacle", 5, checkObstacleHandler);
+  ros::Subscriber subCheckObstacle = nh.subscribe<std_msgs::Bool> ("check_obstacle", 5, checkObstacleHandler);
 
-  ros::Publisher pubPath = nh.advertise<nav_msgs::Path> ("/path", 5);
+  ros::Publisher pubPath = nh.advertise<nav_msgs::Path> ("path", 5);
   nav_msgs::Path path;
 
   #if PLOTPATHSET == 1
-  ros::Publisher pubFreePaths = nh.advertise<sensor_msgs::PointCloud2> ("/free_paths", 2);
+  ros::Publisher pubFreePaths = nh.advertise<sensor_msgs::PointCloud2> ("free_paths", 2);
   #endif
 
   //ros::Publisher pubLaserCloud = nh.advertise<sensor_msgs::PointCloud2> ("/stacked_scans", 2);
@@ -850,7 +854,7 @@ int main(int argc, char** argv)
           }
 
           path.header.stamp = ros::Time().fromSec(odomTime);
-          path.header.frame_id = "vehicle";
+          path.header.frame_id = name_space + "/base_link";
           pubPath.publish(path);
 
           #if PLOTPATHSET == 1
@@ -896,7 +900,7 @@ int main(int argc, char** argv)
           sensor_msgs::PointCloud2 freePaths2;
           pcl::toROSMsg(*freePaths, freePaths2);
           freePaths2.header.stamp = ros::Time().fromSec(odomTime);
-          freePaths2.header.frame_id = "vehicle";
+          freePaths2.header.frame_id = name_space + "/base_link";
           pubFreePaths.publish(freePaths2);
           #endif
         }
@@ -922,7 +926,7 @@ int main(int argc, char** argv)
         path.poses[0].pose.position.z = 0;
 
         path.header.stamp = ros::Time().fromSec(odomTime);
-        path.header.frame_id = "vehicle";
+        path.header.frame_id = name_space + "/base_link";
         pubPath.publish(path);
 
         #if PLOTPATHSET == 1
@@ -930,7 +934,7 @@ int main(int argc, char** argv)
         sensor_msgs::PointCloud2 freePaths2;
         pcl::toROSMsg(*freePaths, freePaths2);
         freePaths2.header.stamp = ros::Time().fromSec(odomTime);
-        freePaths2.header.frame_id = "vehicle";
+        freePaths2.header.frame_id = name_space + "/base_link";
         pubFreePaths.publish(freePaths2);
         #endif
       }

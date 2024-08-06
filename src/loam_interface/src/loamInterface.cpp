@@ -1,3 +1,9 @@
+/*
+  代码的主要作用是把SLAM算法中获得的state estimation和registered scan两个topic订阅
+  之后，统一重新命名为/state_estimation， /registered_scan，并发布map->sensor的tf消息
+*/
+
+
 #include <math.h>
 #include <time.h>
 #include <stdio.h>
@@ -42,97 +48,113 @@ ros::Publisher *pubOdometryPointer = NULL;
 tf::TransformBroadcaster *tfBroadcasterPointer = NULL;
 ros::Publisher *pubLaserCloudPointer = NULL;
 
-void odometryHandler(const nav_msgs::Odometry::ConstPtr& odom)
+void odometryHandler(const nav_msgs::Odometry::ConstPtr &odom)
 {
-  double roll, pitch, yaw;
-  geometry_msgs::Quaternion geoQuat = odom->pose.pose.orientation;
-  odomData = *odom;
+    double roll, pitch, yaw;
+    geometry_msgs::Quaternion geoQuat = odom->pose.pose.orientation;
+    odomData = *odom;
 
-  if (flipStateEstimation) {
-    tf::Matrix3x3(tf::Quaternion(geoQuat.z, -geoQuat.x, -geoQuat.y, geoQuat.w)).getRPY(roll, pitch, yaw);
+    if (flipStateEstimation)
+    {
+        tf::Matrix3x3(tf::Quaternion(geoQuat.z, -geoQuat.x, -geoQuat.y, geoQuat.w)).getRPY(roll, pitch, yaw);
 
-    pitch = -pitch;
-    yaw = -yaw;
+        pitch = -pitch;
+        yaw = -yaw;
 
-    geoQuat = tf::createQuaternionMsgFromRollPitchYaw(roll, pitch, yaw);
+        geoQuat = tf::createQuaternionMsgFromRollPitchYaw(roll, pitch, yaw);
 
-    odomData.pose.pose.orientation = geoQuat;
-    odomData.pose.pose.position.x = odom->pose.pose.position.z;
-    odomData.pose.pose.position.y = odom->pose.pose.position.x;
-    odomData.pose.pose.position.z = odom->pose.pose.position.y;
-  }
-
-  // publish odometry messages
-  odomData.header.frame_id = "map";
-  odomData.child_frame_id = "sensor";
-  pubOdometryPointer->publish(odomData);
-
-  // publish tf messages
-  odomTrans.stamp_ = odom->header.stamp;
-  odomTrans.frame_id_ = "map";
-  odomTrans.child_frame_id_ = "sensor";
-  odomTrans.setRotation(tf::Quaternion(geoQuat.x, geoQuat.y, geoQuat.z, geoQuat.w));
-  odomTrans.setOrigin(tf::Vector3(odomData.pose.pose.position.x, odomData.pose.pose.position.y, odomData.pose.pose.position.z));
-
-  if (sendTF) {
-    if (!reverseTF) {
-      tfBroadcasterPointer->sendTransform(odomTrans);
-    } else {
-      tfBroadcasterPointer->sendTransform(tf::StampedTransform(odomTrans.inverse(), odom->header.stamp, "sensor", "map"));
+        odomData.pose.pose.orientation = geoQuat;
+        odomData.pose.pose.position.x = odom->pose.pose.position.z;
+        odomData.pose.pose.position.y = odom->pose.pose.position.x;
+        odomData.pose.pose.position.z = odom->pose.pose.position.y;
     }
-  }
+
+    // publish odometry messages
+    odomData.header.frame_id = "map";
+    odomData.child_frame_id = "sensor";
+    pubOdometryPointer->publish(odomData);
+
+    // publish tf messages
+    odomTrans.stamp_ = odom->header.stamp;
+    odomTrans.frame_id_ = "map";
+    odomTrans.child_frame_id_ = "sensor";
+    odomTrans.setRotation(tf::Quaternion(geoQuat.x, geoQuat.y, geoQuat.z, geoQuat.w));
+    odomTrans.setOrigin(tf::Vector3(odomData.pose.pose.position.x, odomData.pose.pose.position.y, odomData.pose.pose.position.z));
+
+    if (sendTF)
+    {
+        if (!reverseTF)
+        {
+            tfBroadcasterPointer->sendTransform(odomTrans);
+        }
+        else
+        {
+            tfBroadcasterPointer->sendTransform(tf::StampedTransform(odomTrans.inverse(), odom->header.stamp, "sensor", "map"));
+        }
+    }
+
+    // TODO: connecting odom with vehicle
+    // why odom will jump in gazebo? odom represent the origin of gazebo
+
 }
 
-void laserCloudHandler(const sensor_msgs::PointCloud2ConstPtr& laserCloudIn)
+void laserCloudHandler(const sensor_msgs::PointCloud2ConstPtr &laserCloudIn)
 {
-  laserCloud->clear();
-  pcl::fromROSMsg(*laserCloudIn, *laserCloud);
+    laserCloud->clear();
+    pcl::fromROSMsg(*laserCloudIn, *laserCloud);
 
-  if (flipRegisteredScan) {
-    int laserCloudSize = laserCloud->points.size();
-    for (int i = 0; i < laserCloudSize; i++) {
-      float temp = laserCloud->points[i].x;
-      laserCloud->points[i].x = laserCloud->points[i].z;
-      laserCloud->points[i].z = laserCloud->points[i].y;
-      laserCloud->points[i].y = temp;
+    // Flip the input laserCloudIn
+    // Here use laserCloud rather than directly change laserCloudIn, becuase laserCloudIn is const
+    if (flipRegisteredScan)
+    {
+        int laserCloudSize = laserCloud->points.size();
+        for (int i = 0; i < laserCloudSize; i++)
+        {
+            float temp = laserCloud->points[i].x;
+            laserCloud->points[i].x = laserCloud->points[i].z;
+            laserCloud->points[i].z = laserCloud->points[i].y;
+            laserCloud->points[i].y = temp;
+        }
     }
-  }
 
-  // publish registered scan messages
-  sensor_msgs::PointCloud2 laserCloud2;
-  pcl::toROSMsg(*laserCloud, laserCloud2);
-  laserCloud2.header.stamp = laserCloudIn->header.stamp;
-  laserCloud2.header.frame_id = "map";
-  pubLaserCloudPointer->publish(laserCloud2);
+    // publish registered scan messages
+    sensor_msgs::PointCloud2 laserCloud2;
+    pcl::toROSMsg(*laserCloud, laserCloud2);
+    laserCloud2.header.stamp = laserCloudIn->header.stamp;
+    laserCloud2.header.frame_id = "map";
+    pubLaserCloudPointer->publish(laserCloud2);
 }
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
-  ros::init(argc, argv, "loamInterface");
-  ros::NodeHandle nh;
-  ros::NodeHandle nhPrivate = ros::NodeHandle("~");
+    ros::init(argc, argv, "loamInterface");
+    ros::NodeHandle nh;
+    ros::NodeHandle nhPrivate = ros::NodeHandle("~");
 
-  nhPrivate.getParam("stateEstimationTopic", stateEstimationTopic);
-  nhPrivate.getParam("registeredScanTopic", registeredScanTopic);
-  nhPrivate.getParam("flipStateEstimation", flipStateEstimation);
-  nhPrivate.getParam("flipRegisteredScan", flipRegisteredScan);
-  nhPrivate.getParam("sendTF", sendTF);
-  nhPrivate.getParam("reverseTF", reverseTF);
+    nhPrivate.getParam("stateEstimationTopic", stateEstimationTopic);
+    nhPrivate.getParam("registeredScanTopic", registeredScanTopic);
+    nhPrivate.getParam("flipStateEstimation", flipStateEstimation);
+    nhPrivate.getParam("flipRegisteredScan", flipRegisteredScan);
+    nhPrivate.getParam("sendTF", sendTF);
+    nhPrivate.getParam("reverseTF", reverseTF);
 
-  ros::Subscriber subOdometry = nh.subscribe<nav_msgs::Odometry> (stateEstimationTopic, 5, odometryHandler);
+    // Mainly used to keep consistent frame name: 
+    // In aloam, the frame is camera_init -> aft_mapped'
+    // Here, change the frame to map -> sensor
+    ros::Subscriber subOdometry = nh.subscribe<nav_msgs::Odometry>(stateEstimationTopic, 5, odometryHandler);
 
-  ros::Subscriber subLaserCloud = nh.subscribe<sensor_msgs::PointCloud2> (registeredScanTopic, 5, laserCloudHandler);
+    ros::Subscriber subLaserCloud = nh.subscribe<sensor_msgs::PointCloud2>(registeredScanTopic, 5, laserCloudHandler);
 
-  ros::Publisher pubOdometry = nh.advertise<nav_msgs::Odometry> ("/state_estimation", 5);
-  pubOdometryPointer = &pubOdometry;
+    ros::Publisher pubOdometry = nh.advertise<nav_msgs::Odometry>("/state_estimation", 5);
+    pubOdometryPointer = &pubOdometry;
 
-  tf::TransformBroadcaster tfBroadcaster;
-  tfBroadcasterPointer = &tfBroadcaster;
+    tf::TransformBroadcaster tfBroadcaster;
+    tfBroadcasterPointer = &tfBroadcaster;
 
-  ros::Publisher pubLaserCloud = nh.advertise<sensor_msgs::PointCloud2> ("/registered_scan", 5);
-  pubLaserCloudPointer = &pubLaserCloud;
+    ros::Publisher pubLaserCloud = nh.advertise<sensor_msgs::PointCloud2>("/registered_scan", 5);
+    pubLaserCloudPointer = &pubLaserCloud;
 
-  ros::spin();
+    ros::spin();
 
-  return 0;
+    return 0;
 }
