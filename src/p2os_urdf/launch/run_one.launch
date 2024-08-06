@@ -1,17 +1,21 @@
 <launch>
-    <arg name="world_name" default="campus"/>
-    <!-- campus, forest, garage, indoor, tunnel -->
+    <arg name="world_name" default="larger_garage"/>
 
-    <arg name="robot1_namespace" default="robot1"/>
-    <arg name="robot2_namespace" default="robot2"/>
-    <arg name="robot3_namespace" default="robot3"/>
+    <arg name="robot1_namespace" default="robot_1"/>
+    <arg name="robot2_namespace" default="robot_2"/>
+    <arg name="robot3_namespace" default="robot_3"/>
+    <arg name="robot4_namespace" default="robot_4"/>
+    <arg name="robot5_namespace" default="robot_5"/>
+    <arg name="robot6_namespace" default="robot_6"/>
+
 
     <!-- 启动 gazebo -->
     <include file="$(find gazebo_ros)/launch/empty_world.launch" >
         <arg name="gui" value="true" />
         <arg name="use_sim_time" value="true"/>
-        <arg name="world_name" value="$(find vehicle_simulator)/world/$(arg world_name).world"/>
+        <arg name="world_name" value="$(find p2os_urdf)/world/$(arg world_name).world"/>
     </include>
+
 
     <!-- Launch the first robot (robot1) with its namespace -->
     <group ns="$(arg robot1_namespace)">
