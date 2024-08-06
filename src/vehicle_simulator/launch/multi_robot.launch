@@ -1,4 +1,10 @@
 <launch>
+
+    <include file="$(find p2os_urdf)/launch/run_one.launch" >
+        <arg name="world_name" default="larger_garage"/>
+    </include>
+
+
     <include file="$(find vehicle_simulator)/launch/develop_environment.launch" >
         <arg name="name_space" default="robot_1"/>
         <arg name="vehicleX" default="0"/>

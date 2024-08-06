@@ -4,9 +4,6 @@
     <arg name="vehicleX" default="0"/>
     <arg name="vehicleY" default="0"/>
 
-    <arg name="vehicleHeight" default="0.75"/>
-    <arg name="cameraOffsetZ" default="0"/>
-
     <arg name="checkTerrainConn" default="false"/>
 
     <arg name="sensorOffsetX" default="0"/>
