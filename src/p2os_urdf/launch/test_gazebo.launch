@@ -1,0 +1,20 @@
+<launch>
+    <arg name="world_name" default="indoor"/>
+
+    <arg name="robot1_namespace" default="robot1"/>
+    <arg name="robot2_namespace" default="robot2"/>
+    <arg name="robot3_namespace" default="robot3"/>
+
+
+    <!-- 启动 gazebo -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch" >
+        <arg name="gui" value="true" />
+        <arg name="use_sim_time" value="true"/>
+        <arg name="world_name" value="$(find p2os_urdf)/world/$(arg world_name).world"/>
+    </include>
+
+
+    <!-- <node pkg="rviz" type="rviz" name="rviz"/> -->
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find p2os_urdf)/rviz/rviz.rviz"/>
+
+</launch>

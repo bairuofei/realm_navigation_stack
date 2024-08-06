@@ -1,0 +1,11 @@
+<launch>
+    <arg name="world_name" default="garage"/>
+    <!-- campus, forest, garage, indoor, tunnel -->
+
+    <!-- 启动 gazebo -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch" >
+        <arg name="gui" value="true" />
+        <arg name="use_sim_time" value="true"/>
+        <!-- <arg name="world_name" value="$(find p2os_urdf)/world/$(arg world_name).world"/> -->
+    </include>
+</launch>
