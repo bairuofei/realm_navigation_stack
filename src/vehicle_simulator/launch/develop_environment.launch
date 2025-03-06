@@ -27,11 +27,12 @@
 
     <!-- Launch the first robot (robot1) with its namespace -->
     <group ns="$(arg name_space)">
+        <node pkg="vehicle_simulator" type="filter_velodyne_points" name="filter_velodyne_points" output="screen">
+            <param name="name_space" value="$(arg name_space)"/>
+        </node>
+
         <node pkg="vehicle_simulator" type="pub_registered_scan" name="pub_registered_scan" output="screen" required="true">
             <param name="name_space" value="$(arg name_space)" />
-      
-            <param name="use_gazebo_time" type="bool" value="false" />
-      
             <param name="sensorOffsetX" value="$(arg sensorOffsetX)" />
             <param name="sensorOffsetY" value="$(arg sensorOffsetY)" />
             <param name="vehicleHeight" value="$(arg vehicleHeight)" />
@@ -49,7 +50,7 @@
             <param name="InclFittingThre" value="$(arg InclFittingThre)" />
             <param name="maxIncl" value="$(arg maxIncl)" />
         </node>
-    
+        
         <include file="$(find local_planner)/launch/local_planner.launch" >
             <arg name="name_space" value="$(arg name_space)"/>
             <arg name="cameraOffsetZ" value="$(arg cameraOffsetZ)"/>
@@ -65,7 +66,8 @@
 
         <include file="$(find ps3joy)/launch/ps3.launch" />
 
-        <node launch-prefix="nice" pkg="rviz" type="rviz" name="rvizGA" args="-d $(find vehicle_simulator)/rviz/vehicle_simulator.rviz" respawn="true"/>
+        <!-- By default, we will not start this rviz  -->
+        <!-- <node launch-prefix="nice" pkg="rviz" type="rviz" name="rvizGA" args="-d $(find vehicle_simulator)/rviz/vehicle_simulator.rviz" respawn="true"/> -->
     </group>
 
 
