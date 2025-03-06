@@ -1,0 +1,4 @@
+[35m[1mScanning dependencies of target visualizationTools[0m
+[ 50%] [32mBuilding CXX object CMakeFiles/visualizationTools.dir/src/visualizationTools.cpp.o[0m
+[100%] [32m[1mLinking CXX executable /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/.private/visualization_tools/lib/visualization_tools/visualizationTools[0m
+[100%] Built target visualizationTools

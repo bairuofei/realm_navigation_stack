@@ -1,0 +1,4 @@
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/lib/terrain_analysis_ext/terrainAnalysisExt
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/lib/pkgconfig/terrain_analysis_ext.pc
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/share/terrain_analysis_ext/cmake/terrain_analysis_extConfig.cmake
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/share/terrain_analysis_ext/cmake/terrain_analysis_extConfig-version.cmake

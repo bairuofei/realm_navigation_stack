@@ -1,0 +1,4 @@
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/lib/visualization_tools/visualizationTools
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/lib/pkgconfig/visualization_tools.pc
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/share/visualization_tools/cmake/visualization_toolsConfig.cmake
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/share/visualization_tools/cmake/visualization_toolsConfig-version.cmake

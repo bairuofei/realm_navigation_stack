@@ -1,0 +1,4 @@
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/lib/waypoint_example/waypointExample
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/lib/pkgconfig/waypoint_example.pc
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/share/waypoint_example/cmake/waypoint_exampleConfig.cmake
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/share/waypoint_example/cmake/waypoint_exampleConfig-version.cmake

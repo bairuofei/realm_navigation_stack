@@ -1,0 +1,4 @@
+[35m[1mScanning dependencies of target terrainAnalysis[0m
+[ 50%] [32mBuilding CXX object CMakeFiles/terrainAnalysis.dir/src/terrainAnalysis.cpp.o[0m
+[100%] [32m[1mLinking CXX executable /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/.private/terrain_analysis/lib/terrain_analysis/terrainAnalysis[0m
+[100%] Built target terrainAnalysis

@@ -1,0 +1,8 @@
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/lib/ps3joy/ps3joysim.py
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/lib/ps3joy/ps3joy.py
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/lib/ps3joy/sixpair
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/lib/ps3joy/ps3joy_node.py
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/lib/ps3joy/cmake.lock
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/lib/pkgconfig/ps3joy.pc
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/share/ps3joy/cmake/ps3joyConfig.cmake
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/share/ps3joy/cmake/ps3joyConfig-version.cmake

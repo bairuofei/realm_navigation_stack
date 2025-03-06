@@ -1,0 +1,8 @@
+[35m[1mScanning dependencies of target pathFollower[0m
+[35m[1mScanning dependencies of target localPlanner[0m
+[ 25%] [32mBuilding CXX object CMakeFiles/pathFollower.dir/src/pathFollower.cpp.o[0m
+[ 50%] [32mBuilding CXX object CMakeFiles/localPlanner.dir/src/localPlanner.cpp.o[0m
+[ 75%] [32m[1mLinking CXX executable /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/.private/local_planner/lib/local_planner/pathFollower[0m
+[ 75%] Built target pathFollower
+[100%] [32m[1mLinking CXX executable /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/.private/local_planner/lib/local_planner/localPlanner[0m
+[100%] Built target localPlanner

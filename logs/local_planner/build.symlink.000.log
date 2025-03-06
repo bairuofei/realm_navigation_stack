@@ -1,0 +1,5 @@
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/lib/local_planner/localPlanner
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/lib/local_planner/pathFollower
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/lib/pkgconfig/local_planner.pc
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/share/local_planner/cmake/local_plannerConfig.cmake
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/share/local_planner/cmake/local_plannerConfig-version.cmake

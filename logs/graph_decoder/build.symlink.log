@@ -1,0 +1,4 @@
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/lib/graph_decoder/graph_decoder
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/lib/pkgconfig/graph_decoder.pc
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/share/graph_decoder/cmake/graph_decoderConfig.cmake
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/share/graph_decoder/cmake/graph_decoderConfig-version.cmake

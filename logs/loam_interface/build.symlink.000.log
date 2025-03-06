@@ -1,0 +1,4 @@
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/lib/loam_interface/loamInterface
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/lib/pkgconfig/loam_interface.pc
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/share/loam_interface/cmake/loam_interfaceConfig-version.cmake
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/share/loam_interface/cmake/loam_interfaceConfig.cmake

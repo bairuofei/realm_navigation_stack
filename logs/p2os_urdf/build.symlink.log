@@ -1,0 +1,3 @@
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/lib/pkgconfig/p2os_urdf.pc
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/share/p2os_urdf/cmake/p2os_urdfConfig.cmake
+Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/share/p2os_urdf/cmake/p2os_urdfConfig-version.cmake

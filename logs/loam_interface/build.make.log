@@ -1,0 +1,4 @@
+[35m[1mScanning dependencies of target loamInterface[0m
+[ 50%] [32mBuilding CXX object CMakeFiles/loamInterface.dir/src/loamInterface.cpp.o[0m
+[100%] [32m[1mLinking CXX executable /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/.private/loam_interface/lib/loam_interface/loamInterface[0m
+[100%] Built target loamInterface
