@@ -1,11 +1,11 @@
 # Dynamic Planner Default Params
 main_run_freq                           : 2.5
 voxel_dim                               : 0.15  # Unit: meter
-robot_dim                               : 0.8   # Unit: meter
+robot_dim                               : 0.5   # Unit: meter  原值为0.8
 vehicle_height                          : 0.75  # Unit: meter
 sensor_range                            : 30.0  # Unit: meter
 terrain_range                           : 15.0  # Unit: meter
-local_planner_range                     : 5.0   # Unit: meter
+local_planner_range                     : 3.0   # Unit: meter  默认5m, 修改这个值，看planner输出的waypoint能否距离机器人更近
 visualize_ratio                         : 0.75
 is_viewpoint_extend                     : true
 is_multi_layer                          : false
@@ -28,7 +28,7 @@ MapHandler/map_grad_max_height          : 100.0   # Unit: meter
 # Dynamic Planner Utility Params
 Util/angle_noise                        : 15.0 # Unit: degree
 Util/accept_max_align_angle             : 4.0  # Unit: degree
-Util/obs_inflate_size                   : 1
+Util/obs_inflate_size                   : 0.2   # 障碍物膨胀距离， previous 1
 Util/new_intensity_thred                : 2.0
 Util/terrain_free_Z                     : 0.2
 Util/dyosb_update_thred                 : 4

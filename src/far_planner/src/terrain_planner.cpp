@@ -150,7 +150,7 @@ bool TerrainPlanner::PlanPathFromPToP(const Point3D& from_p, const Point3D& to_p
     return !path.empty();
 }
 
-
+// extract path from end_node to a node has no parent
 void TerrainPlanner::ExtractPath(const TerrainNodePtr& end_ptr, PointStack& path) {
     path.clear();
     TerrainNodePtr cur_ptr = end_ptr;

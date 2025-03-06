@@ -231,8 +231,9 @@ void FARMaster::Loop()
         /* Viz Navigation Graph */
         const NavNodePtr last_internav_ptr = graph_manager_.GetLastInterNavNode();
         if (last_internav_ptr != NULL)
-        {
-            planner_viz_.VizPoint3D(last_internav_ptr->position, "last_nav_node", VizColor::MAGNA, 1.0);
+        {   
+            // This is the last internav node that robot follows in high-level planning
+            planner_viz_.VizPoint3D(last_internav_ptr->position, "last_nav_node", VizColor::MAGNA, 1.0);  
         }
         planner_viz_.VizNodes(clear_nodes_, "clear_nodes", VizColor::ORANGE);
         planner_viz_.VizNodes(graph_manager_.GetOutContourNodes(), "out_contour", VizColor::YELLOW);
@@ -308,7 +309,7 @@ void FARMaster::PlanningCallBack(const ros::TimerEvent &event)
 
         // Update v-graph traversibility
         FARUtil::Timer.start_time("Path Search");
-        graph_planner_.UpdateGraphTraverability(odom_node_ptr_, goal_ptr);
+        graph_planner_.UpdateGraphTraverability(odom_node_ptr_, goal_ptr); // Very important, which reorganize the graph for path search
 
         // Construct path to gaol and publish waypoint
         NodePtrStack global_path;

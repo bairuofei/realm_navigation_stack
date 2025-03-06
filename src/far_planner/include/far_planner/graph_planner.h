@@ -12,7 +12,7 @@ enum ReachVote {
 
 struct GraphPlannerParams {
     GraphPlannerParams() = default;
-    float converge_dist;
+    float converge_dist;  // convergence distance that treates goal as reached
     float adjust_radius;
     float momentum_dist;
     bool  is_autoswitch;
@@ -38,10 +38,10 @@ bool is_goal_in_freespace_  = false;
 bool is_terrain_associated_ = false;
 bool is_goal_init_;
 NodePtrStack current_graph_;
-bool is_free_nav_goal_;
+bool is_free_nav_goal_; // free navigation command
 
 // momentum planning values
-NodePtrStack recorded_path_;
+NodePtrStack recorded_path_; //  used to record the last planning path
 Point3D next_waypoint_;
 int path_momentum_counter_;
 bool is_global_path_init_;
@@ -221,7 +221,7 @@ inline void ResetPlannerInternalValues() {
     is_goal_init_         = false;
     is_use_internav_goal_ = false;
     is_global_path_init_  = false;
-    is_free_nav_goal_     = false;
+    is_free_nav_goal_     = false;  // 默认不是自由导航
     is_goal_in_freespace_ = false;
     
     current_graph_.clear(); 

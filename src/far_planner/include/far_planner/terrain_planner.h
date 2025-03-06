@@ -18,7 +18,7 @@ struct TerrainNode {
     Point3D position;
     bool is_occupied;
     float fscore;
-    float gscore;
+    float gscore; // cost from start to current node
     std::shared_ptr<TerrainNode> parent;
 };
 

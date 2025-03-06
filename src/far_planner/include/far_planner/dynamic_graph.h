@@ -35,7 +35,7 @@ private:
 
     static DynamicGraphParams dg_params_;
     static std::size_t id_tracker_; // Global unique id start from "0" [per robot]
-    static NodePtrStack globalGraphNodes_;
+    static NodePtrStack globalGraphNodes_;  // Global Graph Nodes
     static std::unordered_map<std::size_t, NavNodePtr> idx_node_map_;
     static std::unordered_map<NavNodePtr, std::pair<int, std::unordered_set<NavNodePtr>>> out_contour_nodes_map_;
 
@@ -683,7 +683,7 @@ public:
     }
 
     /* Get Internal Values */
-    const NavNodePtr    GetOdomNode()         const { return odom_node_ptr_;};
+    const NavNodePtr    GetOdomNode()         const { return odom_node_ptr_;};  
     const NodePtrStack& GetNavGraph()         const { return globalGraphNodes_;};
     const NodePtrStack& GetExtendLocalNode()  const { return extend_match_nodes_;};
     const NodePtrStack& GetOutContourNodes()  const { return out_contour_nodes_;};

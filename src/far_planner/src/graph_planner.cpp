@@ -52,7 +52,7 @@ void GraphPlanner::UpdateGraphTraverability(const NavNodePtr& odom_node_ptr, con
         open_set.erase(current->id);
         close_set.insert(current->id);
         current->is_traversable = true; // reachable from current position
-        for (const auto& neighbor : current->connect_nodes) {
+        for (const auto& neighbor : current->connect_nodes) {  // BFS search
             if (close_set.count(neighbor->id) || this->IsInvalidBoundary(current, neighbor)) continue;
             float edist = this->EulerCost(current, neighbor);
             if (neighbor == goal_ptr && edist > FARUtil::kEpsilon && !FARUtil::IsAtSameLayer(neighbor, current)) { // check for multi layer traverse cost
@@ -64,8 +64,9 @@ void GraphPlanner::UpdateGraphTraverability(const NavNodePtr& odom_node_ptr, con
                     continue;
                 }
             }
+            // TODO: check whether current score is in visible region?
             const float temp_gscore = current->gscore + edist;
-            if (temp_gscore < neighbor->gscore) {
+            if (temp_gscore < neighbor->gscore) {   // initial gscore is infinite
                 neighbor->parent = current;
                 neighbor->gscore = temp_gscore;
                 if (!open_set.count(neighbor->id)) {
@@ -139,6 +140,14 @@ bool GraphPlanner::IsValidConnectToGoal(const NavNodePtr& node_ptr, const NavNod
     return false;
 }
 
+// parameters:
+// goal_ptr: goal node pointer
+// global_path: global path from current position to goal
+// _nav_node_ptr: last navigation node pointer
+// _goal_p: goal position, currently is empty
+// _is_fail: fail flag
+// _is_succeed: succeed flag
+// _is_free_nav: free navigation flag
 bool GraphPlanner::PathToGoal(const NavNodePtr& goal_ptr,
                               NodePtrStack& global_path,
                               NavNodePtr& _nav_node_ptr,
@@ -155,7 +164,7 @@ bool GraphPlanner::PathToGoal(const NavNodePtr& goal_ptr,
     _is_fail = false, _is_succeed = false;
     global_path.clear();
     _goal_p = goal_ptr->position;
-    if (current_graph_.size() == 1) {
+    if (current_graph_.size() == 1) {  // Visibility graph is almost empty
         // update global path
         global_path.push_back(odom_node_ptr_);
         global_path.push_back(goal_ptr);
@@ -164,7 +173,7 @@ bool GraphPlanner::PathToGoal(const NavNodePtr& goal_ptr,
         return true;       
     }
     if ((odom_node_ptr_->position - _goal_p).norm() < gp_params_.converge_dist || 
-        (odom_node_ptr_->position - origin_goal_pos_).norm() < gp_params_.converge_dist)
+        (odom_node_ptr_->position - origin_goal_pos_).norm() < gp_params_.converge_dist)  // what is the difference between _goal_p and origin_goal_pos_? 
     {
         if (FARUtil::IsDebug) ROS_INFO("GP: *********** Goal Reached! ***********");
         global_path.push_back(odom_node_ptr_);
@@ -201,7 +210,7 @@ bool GraphPlanner::PathToGoal(const NavNodePtr& goal_ptr,
             const float cur_waypoint_dist = (odom_node_ptr_->position - next_waypoint_).norm();
             if (cur_waypoint_dist > gp_params_.adjust_radius) {
                 if ((odom_node_ptr_->position - last_planning_odom_).norm() < gp_params_.momentum_dist) { // movement momentum
-                    global_path = recorded_path_;
+                    global_path = recorded_path_;  // last planned path
                     _nav_node_ptr = this->NextNavWaypointFromPath(global_path, goal_ptr);
                     path_momentum_counter_ ++;
                     if (FARUtil::IsDebug) ROS_INFO_STREAM("Momentum path counter: " << path_momentum_counter_ << " Over max: "<< gp_params_.momentum_thred);
@@ -227,7 +236,7 @@ bool GraphPlanner::PathToGoal(const NavNodePtr& goal_ptr,
             } 
             // plan new path to goal
             global_path = cur_path;
-            this->RecordPathInfo(global_path);
+            this->RecordPathInfo(global_path);  // update recorded path here
             return true;
         }
     } else { // no valid path found
@@ -261,6 +270,7 @@ bool GraphPlanner::PathToGoal(const NavNodePtr& goal_ptr,
     return false;
 }
 
+// Path planning
 bool GraphPlanner::ReconstructPath(const NavNodePtr& goal_node_ptr,
                                    const bool& is_free_nav,
                                    NodePtrStack& global_path)
@@ -295,6 +305,7 @@ bool GraphPlanner::ReconstructPath(const NavNodePtr& goal_node_ptr,
     return true;
 }
 
+// Find a NavWaypoint that is far enough from the current position, and in the global path
 NavNodePtr GraphPlanner::NextNavWaypointFromPath(const NodePtrStack& global_path, const NavNodePtr goal_ptr) {
     if (global_path.size() < 2) {
         ROS_ERROR("GP: global path size less than 2.");
@@ -317,7 +328,7 @@ NavNodePtr GraphPlanner::NextNavWaypointFromPath(const NodePtrStack& global_path
 
 void GraphPlanner::UpdateGoal(const Point3D& goal) {
     this->GoalReset();
-    is_use_internav_goal_ = false;
+    is_use_internav_goal_ = false;  // decide whether to use internav node (already in the graph) as goal, rather than original goal
     float min_dist = FARUtil::kNearDist;
     for (const auto& node_ptr : current_graph_) {
         node_ptr->is_block_to_goal = false;
@@ -349,7 +360,7 @@ void GraphPlanner::UpdateGoal(const Point3D& goal) {
     if (!FARUtil::IsMultiLayer) {
         goal_node_ptr_->position.z = MapHandler::NearestTerrainHeightofNavPoint(origin_goal_pos_, is_terrain_associated_) + FARUtil::vehicle_height;
     }
-    this->ResetFreeTerrainGridOrigin(goal_node_ptr_->position);
+    this->ResetFreeTerrainGridOrigin(goal_node_ptr_->position);  // update the local grid maps origin
 }
 
 void GraphPlanner::ReEvaluateGoalPosition(const NavNodePtr& goal_ptr, const bool& is_adjust_height)
