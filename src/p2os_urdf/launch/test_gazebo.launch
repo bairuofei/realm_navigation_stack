@@ -1,5 +1,5 @@
 <launch>
-    <arg name="world_name" default="indoor"/>
+    <arg name="world_name" default="random"/>
 
     <arg name="robot1_namespace" default="robot1"/>
     <arg name="robot2_namespace" default="robot2"/>
@@ -16,5 +16,4 @@
 
     <!-- <node pkg="rviz" type="rviz" name="rviz"/> -->
     <node pkg="rviz" type="rviz" name="rviz" args="-d $(find p2os_urdf)/rviz/rviz.rviz"/>
-
 </launch>

@@ -1,5 +1,6 @@
 <launch>
     <arg name="world_name" default="larger_garage"/>
+    <arg name="gazebo_gui" default="true"/>
 
     <arg name="robot1_namespace" default="robot_1"/>
     <arg name="robot2_namespace" default="robot_2"/>
@@ -11,7 +12,7 @@
 
     <!-- 启动 gazebo -->
     <include file="$(find gazebo_ros)/launch/empty_world.launch" >
-        <arg name="gui" value="true" />
+        <arg name="gui" value="$(arg gazebo_gui)" />
         <arg name="use_sim_time" value="true"/>
         <arg name="world_name" value="$(find p2os_urdf)/world/$(arg world_name).world"/>
     </include>
@@ -28,7 +29,7 @@
             <param name="tf_prefix" type="string" value="$(arg robot1_namespace)" />
         </node>
         <!-- 在 gazebo 中显示机器人模型 -->
-        <node pkg="gazebo_ros" type="spawn_model" name="model" args="-urdf -model $(arg robot1_namespace) -param robot_description -x -1 -y -1.5"  >
+        <node pkg="gazebo_ros" type="spawn_model" name="model" args="-urdf -model $(arg robot1_namespace) -param robot_description -y 4"  >
             <!-- <param name="robot_namespace" type="string" value="$(arg robot1_namespace)"/> -->
         </node>
     </group>
@@ -43,14 +44,14 @@
             <param name="tf_prefix" type="string" value="$(arg robot2_namespace)" />
         </node>
         <!-- 在 gazebo 中显示机器人模型 -->
-        <node pkg="gazebo_ros" type="spawn_model" name="model" args="-urdf -model $(arg robot2_namespace) -param robot_description -x 0 -y -1.5"  >
+        <node pkg="gazebo_ros" type="spawn_model" name="model" args="-urdf -model $(arg robot2_namespace) -param robot_description -y 3"  >
             <!-- <param name="robot_namespace" type="string" value="$(arg robot1_namespace)"/> -->
         </node>
     </group>
 
     <group ns="$(arg robot3_namespace)">
         <!-- 将 Urdf 文件的内容加载到参数服务器 -->
-        <param name="robot_description" command="$(find xacro)/xacro $(find p2os_urdf)/defs/pioneer3at.xacro robot_namespace:=$(arg robot3_namespace)" />
+        <param name="robot_description" command="$(find xacro)/xacro $(find p2os_urdf)/defs/pioneer3at_without_3D.xacro robot_namespace:=$(arg robot3_namespace)" />
         <!-- 向rviz发布机器人link和model state中的tf变换 -->
         <!-- 关节以及机器人状态发布节点 -->
         <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
@@ -58,11 +59,56 @@
             <param name="tf_prefix" type="string" value="$(arg robot3_namespace)" />
         </node>
         <!-- 在 gazebo 中显示机器人模型 -->
-        <node pkg="gazebo_ros" type="spawn_model" name="model" args="-urdf -model $(arg robot3_namespace) -param robot_description -x 1 -y -1.5"  >
+        <node pkg="gazebo_ros" type="spawn_model" name="model" args="-urdf -model $(arg robot3_namespace) -param robot_description -y 2"  >
             <!-- <param name="robot_namespace" type="string" value="$(arg robot1_namespace)"/> -->
         </node>
     </group>
 
+    <group ns="$(arg robot4_namespace)">
+        <!-- 将 Urdf 文件的内容加载到参数服务器 -->
+        <param name="robot_description" command="$(find xacro)/xacro $(find p2os_urdf)/defs/pioneer3at_without_3D.xacro robot_namespace:=$(arg robot4_namespace)" />
+        <!-- 向rviz发布机器人link和model state中的tf变换 -->
+        <!-- 关节以及机器人状态发布节点 -->
+        <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+        <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" >
+            <param name="tf_prefix" type="string" value="$(arg robot4_namespace)" />
+        </node>
+        <!-- 在 gazebo 中显示机器人模型 -->
+        <node pkg="gazebo_ros" type="spawn_model" name="model" args="-urdf -model $(arg robot4_namespace) -param robot_description -y 1"  >
+            <!-- <param name="robot_namespace" type="string" value="$(arg robot1_namespace)"/> -->
+        </node>
+    </group>
+
+
+    <group ns="$(arg robot5_namespace)">
+        <!-- 将 Urdf 文件的内容加载到参数服务器 -->
+        <param name="robot_description" command="$(find xacro)/xacro $(find p2os_urdf)/defs/pioneer3at_without_3D.xacro robot_namespace:=$(arg robot5_namespace)" />
+        <!-- 向rviz发布机器人link和model state中的tf变换 -->
+        <!-- 关节以及机器人状态发布节点 -->
+        <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+        <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" >
+            <param name="tf_prefix" type="string" value="$(arg robot5_namespace)" />
+        </node>
+        <!-- 在 gazebo 中显示机器人模型 -->
+        <node pkg="gazebo_ros" type="spawn_model" name="model" args="-urdf -model $(arg robot5_namespace) -param robot_description -y -1"  >
+            <!-- <param name="robot_namespace" type="string" value="$(arg robot1_namespace)"/> -->
+        </node>
+    </group>
+
+    <group ns="$(arg robot6_namespace)">
+        <!-- 将 Urdf 文件的内容加载到参数服务器 -->
+        <param name="robot_description" command="$(find xacro)/xacro $(find p2os_urdf)/defs/pioneer3at_without_3D.xacro robot_namespace:=$(arg robot6_namespace)" />
+        <!-- 向rviz发布机器人link和model state中的tf变换 -->
+        <!-- 关节以及机器人状态发布节点 -->
+        <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+        <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" >
+            <param name="tf_prefix" type="string" value="$(arg robot6_namespace)" />
+        </node>
+        <!-- 在 gazebo 中显示机器人模型 -->
+        <node pkg="gazebo_ros" type="spawn_model" name="model" args="-urdf -model $(arg robot6_namespace) -param robot_description -y -2"  >
+            <!-- <param name="robot_namespace" type="string" value="$(arg robot1_namespace)"/> -->
+        </node>
+    </group>
 
     <!-- <group ns="$(arg robot5_namespace)">
         <param name="robot_description" command="$(find xacro)/xacro $(find p2os_urdf)/defs/pioneer3at.xacro robot_namespace:=$(arg robot5_namespace)" />
