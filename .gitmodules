@@ -1,3 +1,6 @@
 [submodule "src/multi_slam_realm"]
 	path = src/multi_slam_realm
 	url = https://github.com/bairuofei/multi_slam_realm
+[submodule "src/path_planner_realm"]
+	path = src/path_planner_realm
+	url = https://github.com/bairuofei/path_planner_realm
