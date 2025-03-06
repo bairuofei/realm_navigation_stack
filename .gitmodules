@@ -1,0 +1,3 @@
+[submodule "src/multi_slam_realm"]
+	path = src/multi_slam_realm
+	url = https://github.com/bairuofei/multi_slam_realm
