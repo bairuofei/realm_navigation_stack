@@ -85,8 +85,6 @@ float vehicleRecYaw = 0;
 float terrainRecRoll = 0;
 float terrainRecPitch = 0;
 
-float vehicleYawRate = 0;
-float vehicleSpeed = 0;
 
 float terrainZ = 0;      // Current terrain information, updated in callback function
 float terrainRoll = 0;
@@ -176,11 +174,6 @@ void scanHandler(const sensor_msgs::PointCloud2::ConstPtr &scanIn)
 }
 
 
-void speedHandler(const geometry_msgs::TwistStamped::ConstPtr &speedIn)
-{
-    vehicleSpeed = speedIn->twist.linear.x;
-    vehicleYawRate = speedIn->twist.angular.z;
-}
 
 
 void modelStatesCallback(const gazebo_msgs::ModelStates::ConstPtr& msg)
@@ -262,7 +255,7 @@ int main(int argc, char **argv)
 
 
 
-    ros::Subscriber subSpeed = nh.subscribe<geometry_msgs::TwistStamped>("cmd_vel_sim", 5, speedHandler);
+    // ros::Subscriber subSpeed = nh.subscribe<geometry_msgs::TwistStamped>("cmd_vel_sim", 5, speedHandler);
     ros::Subscriber subScan = nh.subscribe<sensor_msgs::PointCloud2>("filtered_velodyne_points", 2, scanHandler);
     ros::Subscriber subModelState = nh.subscribe("/gazebo/model_states", 10, modelStatesCallback);
 
