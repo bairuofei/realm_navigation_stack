@@ -1,4 +1,0 @@
-Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/lib/libteleop_rviz_plugin.so
-Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/lib/pkgconfig/teleop_rviz_plugin.pc
-Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/share/teleop_rviz_plugin/cmake/teleop_rviz_pluginConfig-version.cmake
-Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/share/teleop_rviz_plugin/cmake/teleop_rviz_pluginConfig.cmake

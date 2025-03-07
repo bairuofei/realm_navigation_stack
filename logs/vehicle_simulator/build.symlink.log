@@ -1,8 +1,0 @@
-Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/lib/vehicle_simulator/vehicleSimulatorForGazebo
-Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/lib/vehicle_simulator/pioneer_simulator
-Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/lib/vehicle_simulator/filter_velodyne_points
-Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/lib/vehicle_simulator/vehicleSimulator
-Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/lib/vehicle_simulator/pub_registered_scan
-Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/lib/pkgconfig/vehicle_simulator.pc
-Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/share/vehicle_simulator/cmake/vehicle_simulatorConfig.cmake
-Symlinking /home/ruofei/code/cpp/autonomous_exploration_development_environment/devel/share/vehicle_simulator/cmake/vehicle_simulatorConfig-version.cmake
