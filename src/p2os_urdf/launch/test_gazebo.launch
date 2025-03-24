@@ -1,5 +1,6 @@
 <launch>
-    <arg name="world_name" default="random"/>
+<!-- wide_grid -->
+    <arg name="world_name" default="wide_grid"/>
 
     <arg name="robot1_namespace" default="robot1"/>
     <arg name="robot2_namespace" default="robot2"/>
