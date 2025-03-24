@@ -3,8 +3,11 @@
     <param name="robot_number" value="2"/>
     <!-- Other maps: larger_garage, map4, map7, city, forest, clutter, clutter_larger, test_prior_planning -->
     <arg name="world_name" default="test_prior_planning"/>
+    <arg name="is_visible_aware_planning" default="false"/>
 
     <param name="env_name" value="$(arg world_name)"/>
+    <param name="is_visible_aware_planning" value="$(arg is_visible_aware_planning)"/>
+
 
 
     <!-- Gazebo simulator -->
