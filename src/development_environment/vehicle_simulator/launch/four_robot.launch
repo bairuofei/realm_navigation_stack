@@ -1,16 +1,21 @@
 <launch>
     <!-- Must set robot_number as global parameter!! -->
     <arg name="robot_number" default="4"/>
-    <param name="robot_number" value="$(arg robot_number)"/>
-    <!-- Other maps: larger_garage, map4, map7, city, forest, clutter, clutter_larger -->
-    <arg name="world_name" default="grid_shape"/>
+    <arg name="is_visible_aware_planning" default="false"/>
+    
+    <!-- Other maps: larger_garage, map4, map7, city, forest, clutter, clutter_larger, wide_grid -->
+    <arg name="world_name" default="wide_grid"/>
+    <arg name="gazebo_gui" default="false"/>
 
     <param name="env_name" value="$(arg world_name)"/>
+    <param name="robot_number" value="$(arg robot_number)"/>
+    <param name="is_visible_aware_planning" value="$(arg is_visible_aware_planning)"/>
 
 
     <!-- Gazebo simulator -->
     <include file="$(find p2os_urdf)/launch/run_four.launch" >
         <arg name="world_name" default="$(arg world_name)"/>
+        <arg name="gazebo_gui" default="$(arg gazebo_gui)"/>
     </include>
 
 
@@ -43,6 +48,7 @@
     <!-- far_planner -->
     <include file="$(find far_planner)/launch/far_planner.launch">
         <arg name="name_space" default="robot_2"/>
+        <arg name="output" default="log"/>
     </include>
 
 
@@ -59,6 +65,7 @@
     <!-- far_planner -->
     <include file="$(find far_planner)/launch/far_planner.launch">
         <arg name="name_space" default="robot_3"/>
+        <arg name="output" default="log"/>
     </include>
 
 
@@ -75,6 +82,7 @@
     <!-- far_planner -->
     <include file="$(find far_planner)/launch/far_planner.launch">
         <arg name="name_space" default="robot_4"/>
+        <arg name="output" default="log"/>
     </include>
 
     <!-- TF publisher to bridge map and odom -->
