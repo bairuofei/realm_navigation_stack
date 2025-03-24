@@ -10,18 +10,22 @@ install
 
 .DS_Store
 
-src/vehicle_simulator/mesh/*
+src/development_environment/vehicle_simulator/mesh/*
 
-!src/vehicle_simulator/mesh/matterport
+!src/development_environment/vehicle_simulator/mesh/matterport
 
-src/vehicle_simulator/mesh/matterport/meshes/*
+src/development_environment/vehicle_simulator/mesh/matterport/meshes/*
 
-src/vehicle_simulator/mesh/matterport/segmentations/*
+src/development_environment/vehicle_simulator/mesh/matterport/segmentations/*
 
-src/vehicle_simulator/mesh/matterport/preview/*
+src/development_environment/vehicle_simulator/mesh/matterport/preview/*
 
-src/vehicle_simulator/log/*
+src/development_environment/vehicle_simulator/log/*
 
 !download_environments.sh
 
 !readme.txt
+.catkin_tools
+.vscode
+
+logs/
