@@ -23,15 +23,6 @@
         <arg name="vehicleY" default="0"/>
     </include>
 
-
-    <!-- far_planner -->
-    <include file="$(find far_planner)/launch/far_planner.launch">
-        <arg name="name_space" default="robot_1"/>
-    </include>
-
-
-
-
     <!-- TF publisher to bridge map and odom -->
     <node pkg="tf2_ros" type="static_transform_publisher" name="static_tf_pub_map_to_odom" args="0 0 0 0 0 0 map odom" />
 </launch>

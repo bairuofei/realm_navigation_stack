@@ -64,7 +64,7 @@
             <arg name="checkTerrainConn" value="$(arg checkTerrainConn)"/>
         </include>
 
-        <include file="$(find ps3joy)/launch/ps3.launch" />
+        <!-- <include file="$(find ps3joy)/launch/ps3.launch" /> -->
 
         <!-- By default, we will not start this rviz  -->
         <!-- <node launch-prefix="nice" pkg="rviz" type="rviz" name="rvizGA" args="-d $(find vehicle_simulator)/rviz/vehicle_simulator.rviz" respawn="true"/> -->

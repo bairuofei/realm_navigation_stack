@@ -1,19 +1,17 @@
 <launch>
     <!-- Must set robot_number as global parameter!! -->
-    <arg name="robot_number" default="4"/>
-    <arg name="is_visible_aware_planning" default="false"/>
+    <arg name="robot_number" default="3"/>
     
-    <!-- Other maps: larger_garage, map4, map7, city, forest, clutter, clutter_larger, wide_grid, low_forest, simple_forest -->
-    <arg name="world_name" default="wide_grid"/>
-    <arg name="gazebo_gui" default="false"/>
+    <!-- Other maps: larger_garage, map4, map7, city, forest, clutter, clutter_larger, wide_grid, low_forest, simple_forest, small_forest -->
+    <arg name="world_name" default="small_forest"/>
+    <arg name="gazebo_gui" default="true"/>
 
     <param name="env_name" value="$(arg world_name)"/>
     <param name="robot_number" value="$(arg robot_number)"/>
-    <param name="is_visible_aware_planning" value="$(arg is_visible_aware_planning)"/>
 
 
     <!-- Gazebo simulator -->
-    <include file="$(find p2os_urdf)/launch/run_four.launch" >
+    <include file="$(find p2os_urdf)/launch/run_three.launch" >
         <arg name="world_name" default="$(arg world_name)"/>
         <arg name="gazebo_gui" default="$(arg gazebo_gui)"/>
     </include>
@@ -29,11 +27,6 @@
         <arg name="vehicleY" default="0"/>
     </include>
 
-    <!-- far_planner -->
-    <include file="$(find far_planner)/launch/far_planner.launch">
-        <arg name="name_space" default="robot_1"/>
-        <arg name="start_rviz" default="true"/>
-    </include>
 
 
     <!-- Robot 2 -->
@@ -44,13 +37,6 @@
         <!-- robot will not subscribe this command, so it is not important -->
         <arg name="vehicleX" default="0"/>
         <arg name="vehicleY" default="0"/>
-    </include>
-
-    <!-- far_planner -->
-    <include file="$(find far_planner)/launch/far_planner.launch">
-        <arg name="name_space" default="robot_2"/>
-        <arg name="output" default="log"/>
-        <arg name="start_rviz" default="true"/>
     </include>
 
 
@@ -64,30 +50,6 @@
         <arg name="vehicleY" default="0"/>
     </include>
 
-    <!-- far_planner -->
-    <include file="$(find far_planner)/launch/far_planner.launch">
-        <arg name="name_space" default="robot_3"/>
-        <arg name="output" default="log"/>
-        <arg name="start_rviz" default="true"/>
-    </include>
-
-
-    <!-- Robot 4 -->
-    <!-- Autonomous exploration development environment -->
-    <include file="$(find vehicle_simulator)/launch/develop_environment.launch" >
-        <arg name="name_space" default="robot_4"/>
-        <!-- Necessary to set initial goal point for local planner -->
-        <!-- robot will not subscribe this command, so it is not important -->
-        <arg name="vehicleX" default="0"/>
-        <arg name="vehicleY" default="0"/>
-    </include>
-
-    <!-- far_planner -->
-    <include file="$(find far_planner)/launch/far_planner.launch">
-        <arg name="name_space" default="robot_4"/>
-        <arg name="output" default="log"/>
-        <arg name="start_rviz" default="true"/>
-    </include>
 
     <!-- TF publisher to bridge map and odom -->
     <node pkg="tf2_ros" type="static_transform_publisher" name="static_tf_pub_map_to_odom" args="0 0 0 0 0 0 map odom" />
