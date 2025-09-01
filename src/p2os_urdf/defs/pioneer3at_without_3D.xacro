@@ -27,7 +27,7 @@ name="pioneer3at">
         <parent link="support"/>
         <child link="velodyne"/>
         <!-- 设置子link相对于父link的位姿 -->
-        <origin xyz="0 0 1" rpy="0 0 0"/>
+        <origin xyz="0 0 0.188" rpy="0 0 0"/>
     </joint>
 
     <xacro:p3at_front suffix="left" reflect="1"/>

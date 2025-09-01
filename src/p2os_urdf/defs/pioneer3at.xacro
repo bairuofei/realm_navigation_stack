@@ -6,11 +6,13 @@
        xmlns:xacro="http://ros.org/wiki/xacro"
 name="pioneer3at">
 
+    <xacro:arg name="robot_namespace" default="robot_0"/>
     <xacro:property name="robot_namespace" value="$(arg robot_namespace)" />
 
     <!-- 惯性矩阵计算 -->
     <xacro:include filename="inertial_matrix.xacro" />
     <xacro:include filename="$(find p2os_urdf)/defs/pioneer3at_body.xacro"/>
+
     <!-- 给laser link添加3D雷达功能的实现 -->
     <xacro:include filename="sensor_3D_laser.urdf.xacro" />
     <!-- 给sensor_laser link添加2D激光雷达实现 -->

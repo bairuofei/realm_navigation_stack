@@ -1,6 +1,7 @@
 <launch>
-<!-- wide_grid -->
-    <arg name="world_name" default="wide_grid"/>
+<!-- wide_grid, small_forest -->
+
+    <arg name="world_name" default="small_forest"/>
 
     <arg name="robot1_namespace" default="robot1"/>
     <arg name="robot2_namespace" default="robot2"/>

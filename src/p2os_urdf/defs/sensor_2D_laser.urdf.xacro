@@ -1,7 +1,7 @@
 <robot name="2d_laser" xmlns:xacro="http://wiki.ros.org/xacro">
     <!--Gazebo Hokuyo Laser Plugin-->
 
-    <xacro:arg name="robot_namespace" default=""/>
+    <!-- <xacro:arg name="robot_namespace" default=""/> -->
     <gazebo reference="sensor_laser">
         <!-- <sensor type="gpu_ray" name="head_hokuyo_sensor"> -->
         <sensor type="ray" name="head_hokuyo_sensor">

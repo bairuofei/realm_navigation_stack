@@ -1,6 +1,6 @@
 <launch>
     <arg name="world_name" default="larger_garage"/>
-    <arg name="gazebo_gui" default="true"/>
+    <arg name="gazebo_gui" default="false"/>
 
     <arg name="robot1_namespace" default="robot_1"/>
     <arg name="robot2_namespace" default="robot_2"/>
